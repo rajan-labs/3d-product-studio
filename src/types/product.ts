@@ -1,4 +1,4 @@
-export type ProductType = 'mobile' | 'laptop' | 'pc' | 'tablet' | 'watch' | 'tv';
+export type ProductType = 'mobile' | 'laptop' | 'pc' | 'tablet' | 'watch' | 'tv' | 'camera';
 
 export interface ProductColor {
   id: string;

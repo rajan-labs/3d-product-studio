@@ -39,6 +39,8 @@ export const ProductModel = ({ type, color }: ProductModelProps) => {
         return <WatchModel {...materialProps} />;
       case 'tv':
         return <TVModel {...materialProps} />;
+      case 'camera':
+        return <CameraModel {...materialProps} />;
       default:
         return <MobileModel {...materialProps} />;
     }
@@ -207,5 +209,70 @@ const TVModel = ({ color, metalness, roughness }: ModelMaterialProps) => (
       <boxGeometry args={[0.15, 0.15, 0.3]} />
       <meshStandardMaterial color={color} metalness={metalness} roughness={roughness} />
     </mesh>
+  </group>
+);
+
+const CameraModel = ({ color, metalness, roughness }: ModelMaterialProps) => (
+  <group rotation={[0.1, 0.3, 0]}>
+    {/* Camera body */}
+    <RoundedBox args={[1.6, 1, 0.9]} radius={0.08}>
+      <meshStandardMaterial color={color} metalness={metalness} roughness={roughness} />
+    </RoundedBox>
+    {/* Viewfinder bump */}
+    <RoundedBox args={[0.5, 0.35, 0.3]} radius={0.05} position={[-0.35, 0.65, -0.1]}>
+      <meshStandardMaterial color={color} metalness={metalness} roughness={roughness} />
+    </RoundedBox>
+    {/* Viewfinder eye piece */}
+    <mesh position={[-0.35, 0.65, 0.1]} rotation={[Math.PI / 2, 0, 0]}>
+      <cylinderGeometry args={[0.1, 0.1, 0.15, 32]} />
+      <meshStandardMaterial color="#1a1a2e" metalness={0.8} roughness={0.3} />
+    </mesh>
+    {/* Lens mount */}
+    <mesh position={[0, 0, 0.45]} rotation={[Math.PI / 2, 0, 0]}>
+      <cylinderGeometry args={[0.5, 0.5, 0.15, 64]} />
+      <meshStandardMaterial color="#2a2a3e" metalness={0.9} roughness={0.2} />
+    </mesh>
+    {/* Main lens barrel */}
+    <mesh position={[0, 0, 0.8]} rotation={[Math.PI / 2, 0, 0]}>
+      <cylinderGeometry args={[0.45, 0.48, 0.6, 64]} />
+      <meshStandardMaterial color="#1f1f2f" metalness={0.7} roughness={0.4} />
+    </mesh>
+    {/* Lens ring (focus) */}
+    <mesh position={[0, 0, 1.0]} rotation={[Math.PI / 2, 0, 0]}>
+      <cylinderGeometry args={[0.47, 0.47, 0.15, 64]} />
+      <meshStandardMaterial color="#3a3a4e" metalness={0.5} roughness={0.6} />
+    </mesh>
+    {/* Front element */}
+    <mesh position={[0, 0, 1.15]} rotation={[Math.PI / 2, 0, 0]}>
+      <cylinderGeometry args={[0.35, 0.4, 0.1, 64]} />
+      <meshStandardMaterial color="#0a0a15" metalness={0.95} roughness={0.05} />
+    </mesh>
+    {/* Glass element */}
+    <mesh position={[0, 0, 1.21]} rotation={[Math.PI / 2, 0, 0]}>
+      <cylinderGeometry args={[0.3, 0.3, 0.02, 64]} />
+      <meshStandardMaterial color="#1e3a5f" metalness={0.1} roughness={0.05} transparent opacity={0.4} />
+    </mesh>
+    {/* Mode dial */}
+    <mesh position={[0.55, 0.55, -0.2]} rotation={[0, 0, 0]}>
+      <cylinderGeometry args={[0.15, 0.15, 0.15, 32]} />
+      <meshStandardMaterial color={color} metalness={metalness} roughness={roughness} />
+    </mesh>
+    {/* Shutter button */}
+    <mesh position={[0.4, 0.55, 0.15]}>
+      <cylinderGeometry args={[0.08, 0.08, 0.08, 32]} />
+      <meshStandardMaterial color="#c0c0c0" metalness={0.9} roughness={0.2} />
+    </mesh>
+    {/* Hot shoe */}
+    <RoundedBox args={[0.3, 0.05, 0.25]} radius={0.01} position={[0, 0.53, -0.15]}>
+      <meshStandardMaterial color="#2a2a2a" metalness={0.8} roughness={0.3} />
+    </RoundedBox>
+    {/* Grip texture */}
+    <RoundedBox args={[0.25, 0.8, 0.85]} radius={0.05} position={[0.7, -0.05, 0]}>
+      <meshStandardMaterial color="#1a1a1a" metalness={0.1} roughness={0.9} />
+    </RoundedBox>
+    {/* Screen on back */}
+    <RoundedBox args={[1.2, 0.75, 0.02]} radius={0.02} position={[0, -0.05, -0.46]}>
+      <meshStandardMaterial color="#0f172a" metalness={0.9} roughness={0.1} />
+    </RoundedBox>
   </group>
 );

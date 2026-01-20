@@ -34,6 +34,16 @@ export const products: Product[] = [
           { id: '16gb', label: '16 GB', price: 100 },
         ],
       },
+      {
+        id: 'camera',
+        name: 'Camera',
+        options: [
+          { id: '12mp', label: '12 MP', price: 0 },
+          { id: '48mp', label: '48 MP', price: 100 },
+          { id: '108mp', label: '108 MP Pro', price: 200 },
+          { id: '200mp', label: '200 MP Ultra', price: 400 },
+        ],
+      },
     ],
   },
   {
@@ -77,6 +87,15 @@ export const products: Product[] = [
           { id: '512gb', label: '512 GB SSD', price: 100 },
           { id: '1tb', label: '1 TB SSD', price: 200 },
           { id: '2tb', label: '2 TB SSD', price: 400 },
+        ],
+      },
+      {
+        id: 'webcam',
+        name: 'Webcam',
+        options: [
+          { id: '720p', label: '720p HD', price: 0 },
+          { id: '1080p', label: '1080p FHD', price: 50 },
+          { id: '4k', label: '4K Ultra', price: 150 },
         ],
       },
     ],
@@ -163,6 +182,15 @@ export const products: Product[] = [
           { id: 'pro', label: 'Pro Stylus', price: 199 },
         ],
       },
+      {
+        id: 'camera',
+        name: 'Camera',
+        options: [
+          { id: '8mp', label: '8 MP', price: 0 },
+          { id: '12mp', label: '12 MP', price: 50 },
+          { id: '12mp-pro', label: '12 MP Pro Wide', price: 100 },
+        ],
+      },
     ],
   },
   {
@@ -244,6 +272,59 @@ export const products: Product[] = [
           { id: 'built-in', label: 'Built-in Speakers', price: 0 },
           { id: 'soundbar', label: 'Soundbar Bundle', price: 299 },
           { id: 'dolby', label: 'Dolby Atmos System', price: 799 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'camera',
+    name: 'ProShot DSLR',
+    basePrice: 1299,
+    description: 'Professional mirrorless camera for creators',
+    icon: '📷',
+    colors: [
+      { id: 'black', name: 'Classic Black', hex: '#1a1a1a', price: 0 },
+      { id: 'silver', name: 'Silver Chrome', hex: '#c0c0c0', price: 100 },
+      { id: 'titanium', name: 'Titanium Gray', hex: '#6b7280', price: 150 },
+      { id: 'vintage', name: 'Vintage Brown', hex: '#8b4513', price: 200 },
+    ],
+    variants: [
+      {
+        id: 'sensor',
+        name: 'Sensor',
+        options: [
+          { id: 'apsc', label: 'APS-C 24MP', price: 0 },
+          { id: 'fullframe', label: 'Full Frame 45MP', price: 800 },
+          { id: 'medium', label: 'Medium Format 100MP', price: 2500 },
+        ],
+      },
+      {
+        id: 'lens',
+        name: 'Lens Kit',
+        options: [
+          { id: 'body', label: 'Body Only', price: 0 },
+          { id: '24-70', label: '24-70mm f/2.8', price: 800 },
+          { id: '70-200', label: '70-200mm f/2.8', price: 1200 },
+          { id: 'prime', label: '50mm f/1.2 Prime', price: 1500 },
+        ],
+      },
+      {
+        id: 'video',
+        name: 'Video',
+        options: [
+          { id: '4k30', label: '4K 30fps', price: 0 },
+          { id: '4k60', label: '4K 60fps', price: 200 },
+          { id: '8k30', label: '8K 30fps', price: 600 },
+          { id: '8k60', label: '8K 60fps RAW', price: 1200 },
+        ],
+      },
+      {
+        id: 'stabilization',
+        name: 'Stabilization',
+        options: [
+          { id: 'none', label: 'No IBIS', price: 0 },
+          { id: '5axis', label: '5-Axis IBIS', price: 300 },
+          { id: '8stop', label: '8-Stop IBIS Pro', price: 600 },
         ],
       },
     ],
