@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ProductScene } from '@/components/3d/ProductScene';
 import { ProductSidebar } from '@/components/ProductSidebar';
 import { CustomizationPanel } from '@/components/CustomizationPanel';
+import { ProductGallery } from '@/components/ProductGallery';
 import { products } from '@/data/products';
 import { Product, ProductColor } from '@/types/product';
 
@@ -129,6 +130,14 @@ const Index = () => {
               <span className="text-2xl mr-2">{selectedProduct.icon}</span>
               <span className="font-display font-semibold">{selectedProduct.name}</span>
             </motion.div>
+          </div>
+
+          {/* Product Gallery */}
+          <div className="absolute bottom-4 right-4 w-64">
+            <ProductGallery 
+              productName={selectedProduct.name} 
+              colorName={selectedColor.name} 
+            />
           </div>
         </motion.main>
 
