@@ -41,6 +41,10 @@ export const ProductModel = ({ type, color }: ProductModelProps) => {
         return <TVModel {...materialProps} />;
       case 'camera':
         return <CameraModel {...materialProps} />;
+      case 'drone':
+        return <DroneModel {...materialProps} />;
+      case 'vr':
+        return <VRModel {...materialProps} />;
       default:
         return <MobileModel {...materialProps} />;
     }
@@ -273,6 +277,135 @@ const CameraModel = ({ color, metalness, roughness }: ModelMaterialProps) => (
     {/* Screen on back */}
     <RoundedBox args={[1.2, 0.75, 0.02]} radius={0.02} position={[0, -0.05, -0.46]}>
       <meshStandardMaterial color="#0f172a" metalness={0.9} roughness={0.1} />
+    </RoundedBox>
+  </group>
+);
+
+const DroneModel = ({ color, metalness, roughness }: ModelMaterialProps) => (
+  <group rotation={[0.2, 0, 0]}>
+    {/* Central body */}
+    <RoundedBox args={[0.8, 0.25, 0.8]} radius={0.08}>
+      <meshStandardMaterial color={color} metalness={metalness} roughness={roughness} />
+    </RoundedBox>
+    {/* Top dome (sensors) */}
+    <mesh position={[0, 0.18, 0]}>
+      <sphereGeometry args={[0.2, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2]} />
+      <meshStandardMaterial color="#1a1a2e" metalness={0.8} roughness={0.2} />
+    </mesh>
+    {/* Camera gimbal */}
+    <group position={[0, -0.2, 0.2]}>
+      <mesh>
+        <sphereGeometry args={[0.12, 32, 32]} />
+        <meshStandardMaterial color="#0f172a" metalness={0.9} roughness={0.1} />
+      </mesh>
+      <mesh position={[0, 0, 0.1]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.06, 0.06, 0.05, 32]} />
+        <meshStandardMaterial color="#1e3a5f" metalness={0.1} roughness={0.1} transparent opacity={0.5} />
+      </mesh>
+    </group>
+    {/* Arms */}
+    {[[-1, 0, -1], [1, 0, -1], [-1, 0, 1], [1, 0, 1]].map((pos, i) => (
+      <group key={i}>
+        {/* Arm */}
+        <mesh position={[pos[0] * 0.6, 0, pos[2] * 0.6]} rotation={[0, Math.atan2(pos[0], pos[2]), 0]}>
+          <boxGeometry args={[0.08, 0.08, 0.6]} />
+          <meshStandardMaterial color={color} metalness={metalness} roughness={roughness} />
+        </mesh>
+        {/* Motor housing */}
+        <mesh position={[pos[0] * 0.9, 0.05, pos[2] * 0.9]}>
+          <cylinderGeometry args={[0.1, 0.1, 0.1, 32]} />
+          <meshStandardMaterial color="#2a2a3e" metalness={0.8} roughness={0.3} />
+        </mesh>
+        {/* Propeller */}
+        <mesh position={[pos[0] * 0.9, 0.12, pos[2] * 0.9]}>
+          <cylinderGeometry args={[0.35, 0.35, 0.01, 32]} />
+          <meshStandardMaterial color="#374151" metalness={0.3} roughness={0.6} transparent opacity={0.6} />
+        </mesh>
+      </group>
+    ))}
+    {/* Landing gear */}
+    {[[-0.4, -0.25, 0.3], [0.4, -0.25, 0.3], [-0.4, -0.25, -0.3], [0.4, -0.25, -0.3]].map((pos, i) => (
+      <mesh key={i} position={pos as [number, number, number]}>
+        <cylinderGeometry args={[0.02, 0.02, 0.15, 16]} />
+        <meshStandardMaterial color="#1f2937" metalness={0.5} roughness={0.5} />
+      </mesh>
+    ))}
+    {/* Front LED */}
+    <mesh position={[0, 0, 0.42]}>
+      <sphereGeometry args={[0.03, 16, 16]} />
+      <meshStandardMaterial color="#22c55e" emissive="#22c55e" emissiveIntensity={2} />
+    </mesh>
+    {/* Back LEDs */}
+    <mesh position={[-0.15, 0, -0.42]}>
+      <sphereGeometry args={[0.02, 16, 16]} />
+      <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={2} />
+    </mesh>
+    <mesh position={[0.15, 0, -0.42]}>
+      <sphereGeometry args={[0.02, 16, 16]} />
+      <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={2} />
+    </mesh>
+  </group>
+);
+
+const VRModel = ({ color, metalness, roughness }: ModelMaterialProps) => (
+  <group rotation={[0.1, 0.2, 0]}>
+    {/* Main headset body */}
+    <RoundedBox args={[1.8, 0.9, 0.6]} radius={0.15}>
+      <meshStandardMaterial color={color} metalness={metalness} roughness={roughness} />
+    </RoundedBox>
+    {/* Face cushion */}
+    <mesh position={[0, 0, -0.32]}>
+      <boxGeometry args={[1.6, 0.75, 0.1]} />
+      <meshStandardMaterial color="#1f1f1f" metalness={0.1} roughness={0.9} />
+    </mesh>
+    {/* Lenses */}
+    <mesh position={[-0.35, 0, 0.32]} rotation={[Math.PI / 2, 0, 0]}>
+      <cylinderGeometry args={[0.22, 0.22, 0.05, 32]} />
+      <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.05} />
+    </mesh>
+    <mesh position={[0.35, 0, 0.32]} rotation={[Math.PI / 2, 0, 0]}>
+      <cylinderGeometry args={[0.22, 0.22, 0.05, 32]} />
+      <meshStandardMaterial color="#0f172a" metalness={0.95} roughness={0.05} />
+    </mesh>
+    {/* Nose gap */}
+    <mesh position={[0, -0.25, 0.25]}>
+      <boxGeometry args={[0.25, 0.3, 0.15]} />
+      <meshStandardMaterial color="#0a0a0a" metalness={0.1} roughness={0.9} />
+    </mesh>
+    {/* Top strap mount */}
+    <RoundedBox args={[0.6, 0.15, 0.3]} radius={0.05} position={[0, 0.5, 0]}>
+      <meshStandardMaterial color={color} metalness={metalness} roughness={roughness} />
+    </RoundedBox>
+    {/* Head strap */}
+    <mesh position={[0, 0.3, -0.5]}>
+      <torusGeometry args={[0.5, 0.05, 16, 32, Math.PI]} />
+      <meshStandardMaterial color="#374151" metalness={0.3} roughness={0.7} />
+    </mesh>
+    {/* Side straps */}
+    <RoundedBox args={[0.15, 0.5, 0.08]} radius={0.03} position={[-0.95, 0.1, -0.1]} rotation={[0, 0, 0.2]}>
+      <meshStandardMaterial color="#374151" metalness={0.3} roughness={0.7} />
+    </RoundedBox>
+    <RoundedBox args={[0.15, 0.5, 0.08]} radius={0.03} position={[0.95, 0.1, -0.1]} rotation={[0, 0, -0.2]}>
+      <meshStandardMaterial color="#374151" metalness={0.3} roughness={0.7} />
+    </RoundedBox>
+    {/* Tracking cameras */}
+    {[[-0.7, 0.3, 0.32], [0.7, 0.3, 0.32], [-0.7, -0.3, 0.32], [0.7, -0.3, 0.32]].map((pos, i) => (
+      <mesh key={i} position={pos as [number, number, number]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.04, 0.04, 0.03, 16]} />
+        <meshStandardMaterial color="#1e3a5f" metalness={0.7} roughness={0.2} />
+      </mesh>
+    ))}
+    {/* Power button */}
+    <mesh position={[0.92, 0, 0.1]} rotation={[0, 0, Math.PI / 2]}>
+      <cylinderGeometry args={[0.04, 0.04, 0.03, 16]} />
+      <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={0.5} />
+    </mesh>
+    {/* Volume buttons */}
+    <RoundedBox args={[0.03, 0.15, 0.05]} radius={0.01} position={[-0.92, 0.15, 0.1]}>
+      <meshStandardMaterial color="#4b5563" metalness={0.5} roughness={0.5} />
+    </RoundedBox>
+    <RoundedBox args={[0.03, 0.15, 0.05]} radius={0.01} position={[-0.92, -0.05, 0.1]}>
+      <meshStandardMaterial color="#4b5563" metalness={0.5} roughness={0.5} />
     </RoundedBox>
   </group>
 );

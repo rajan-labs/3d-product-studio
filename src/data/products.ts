@@ -329,4 +329,112 @@ export const products: Product[] = [
       },
     ],
   },
+  {
+    id: 'drone',
+    name: 'SkyPro X1',
+    basePrice: 899,
+    description: 'Professional aerial photography drone',
+    icon: '🚁',
+    colors: [
+      { id: 'gray', name: 'Stealth Gray', hex: '#4b5563', price: 0 },
+      { id: 'white', name: 'Arctic White', hex: '#f1f5f9', price: 0 },
+      { id: 'orange', name: 'Rescue Orange', hex: '#f97316', price: 50 },
+      { id: 'camo', name: 'Forest Camo', hex: '#365314', price: 100 },
+    ],
+    variants: [
+      {
+        id: 'camera',
+        name: 'Camera Resolution',
+        options: [
+          { id: '1080p', label: '1080p HD', price: 0 },
+          { id: '4k', label: '4K Ultra HD', price: 200 },
+          { id: '6k', label: '6K Pro', price: 500 },
+          { id: '8k', label: '8K Cinema', price: 1000 },
+        ],
+      },
+      {
+        id: 'flight',
+        name: 'Flight Time',
+        options: [
+          { id: '20min', label: '20 Minutes', price: 0 },
+          { id: '35min', label: '35 Minutes', price: 150 },
+          { id: '45min', label: '45 Minutes', price: 300 },
+          { id: '60min', label: '60 Min Extended', price: 500 },
+        ],
+      },
+      {
+        id: 'obstacle',
+        name: 'Obstacle Avoidance',
+        options: [
+          { id: 'front', label: 'Front Only', price: 0 },
+          { id: 'front-back', label: 'Front + Back', price: 100 },
+          { id: '360', label: '360° Sensors', price: 250 },
+          { id: 'ai', label: 'AI Navigation', price: 500 },
+        ],
+      },
+      {
+        id: 'range',
+        name: 'Control Range',
+        options: [
+          { id: '2km', label: '2 km', price: 0 },
+          { id: '5km', label: '5 km', price: 100 },
+          { id: '10km', label: '10 km', price: 250 },
+          { id: '15km', label: '15 km Pro', price: 400 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'vr',
+    name: 'VisionX Pro',
+    basePrice: 499,
+    description: 'Immersive virtual reality headset',
+    icon: '🥽',
+    colors: [
+      { id: 'black', name: 'Matte Black', hex: '#1a1a1a', price: 0 },
+      { id: 'white', name: 'Pure White', hex: '#f8fafc', price: 0 },
+      { id: 'blue', name: 'Electric Blue', hex: '#2563eb', price: 75 },
+      { id: 'red', name: 'Racing Red', hex: '#dc2626', price: 75 },
+    ],
+    variants: [
+      {
+        id: 'display',
+        name: 'Display Resolution',
+        options: [
+          { id: '2k', label: '2K per Eye', price: 0 },
+          { id: '4k', label: '4K per Eye', price: 300 },
+          { id: '8k', label: '8K per Eye', price: 800 },
+        ],
+      },
+      {
+        id: 'refresh',
+        name: 'Refresh Rate',
+        options: [
+          { id: '72hz', label: '72 Hz', price: 0 },
+          { id: '90hz', label: '90 Hz', price: 100 },
+          { id: '120hz', label: '120 Hz', price: 200 },
+          { id: '144hz', label: '144 Hz Pro', price: 350 },
+        ],
+      },
+      {
+        id: 'controllers',
+        name: 'Controllers',
+        options: [
+          { id: 'standard', label: 'Standard Controllers', price: 0 },
+          { id: 'haptic', label: 'Haptic Controllers', price: 150 },
+          { id: 'pro', label: 'Pro Controllers', price: 250 },
+          { id: 'gloves', label: 'Haptic Gloves', price: 500 },
+        ],
+      },
+      {
+        id: 'tracking',
+        name: 'Tracking',
+        options: [
+          { id: 'inside', label: 'Inside-Out', price: 0 },
+          { id: 'base', label: 'Base Stations', price: 200 },
+          { id: 'full', label: 'Full Body Kit', price: 600 },
+        ],
+      },
+    ],
+  },
 ];
