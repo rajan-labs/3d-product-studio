@@ -1,9 +1,14 @@
 import { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ShoppingCart, GitCompare } from 'lucide-react';
 import { ProductScene } from '@/components/3d/ProductScene';
 import { ProductSidebar } from '@/components/ProductSidebar';
 import { CustomizationPanel } from '@/components/CustomizationPanel';
 import { ProductGallery } from '@/components/ProductGallery';
+import { CartDrawer } from '@/components/CartDrawer';
+import { CompareModal } from '@/components/CompareModal';
+import { useCartStore } from '@/hooks/useCartStore';
+import { useCompareStore } from '@/hooks/useCompareStore';
 import { products } from '@/data/products';
 import { Product, ProductColor } from '@/types/product';
 
@@ -18,6 +23,17 @@ const Index = () => {
     return initial;
   });
 
+  // Camera controls
+  const [cameraView, setCameraView] = useState('front');
+  const [cameraPosition, setCameraPosition] = useState<[number, number, number]>([0, 0, 6]);
+  const [cameraTarget, setCameraTarget] = useState<[number, number, number]>([0, 0, 0]);
+
+  // Cart & Compare
+  const { items, addToCart, removeFromCart, updateQuantity, clearCart, cartTotal, itemCount } = useCartStore();
+  const { compareItems, addToCompare, removeFromCompare, clearCompare, isInCompare } = useCompareStore();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCompareOpen, setIsCompareOpen] = useState(false);
+
   const handleProductSelect = useCallback((product: Product) => {
     setSelectedProduct(product);
     setSelectedColor(product.colors[0]);
@@ -26,6 +42,10 @@ const Index = () => {
       newVariants[v.id] = v.options[0].id;
     });
     setSelectedVariants(newVariants);
+    // Reset camera view
+    setCameraView('front');
+    setCameraPosition([0, 0, 6]);
+    setCameraTarget([0, 0, 0]);
   }, []);
 
   const handleColorSelect = useCallback((color: ProductColor) => {
@@ -37,6 +57,12 @@ const Index = () => {
       ...prev,
       [variantId]: optionId,
     }));
+  }, []);
+
+  const handleViewChange = useCallback((viewId: string, position: [number, number, number], target: [number, number, number]) => {
+    setCameraView(viewId);
+    setCameraPosition(position);
+    setCameraTarget(target);
   }, []);
 
   const totalPrice = useMemo(() => {
@@ -52,6 +78,18 @@ const Index = () => {
     
     return price;
   }, [selectedProduct, selectedColor, selectedVariants]);
+
+  const handleAddToCart = useCallback(() => {
+    addToCart(selectedProduct, selectedColor, selectedVariants, totalPrice);
+    setIsCartOpen(true);
+  }, [selectedProduct, selectedColor, selectedVariants, totalPrice, addToCart]);
+
+  const handleAddToCompare = useCallback(() => {
+    addToCompare(selectedProduct, selectedColor, selectedVariants, totalPrice);
+    if (compareItems.length >= 1) {
+      setIsCompareOpen(true);
+    }
+  }, [selectedProduct, selectedColor, selectedVariants, totalPrice, addToCompare, compareItems.length]);
 
   const handleOrder = useCallback(() => {
     const configuredProduct = {
@@ -81,13 +119,48 @@ const Index = () => {
       <motion.header
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="text-center mb-8"
+        className="flex items-center justify-between mb-8"
       >
-        <h1 className="text-3xl lg:text-5xl font-display font-bold mb-2">
-          <span className="glow-text">Virtual</span>{' '}
-          <span className="text-foreground">Product Studio</span>
-        </h1>
-        <p className="text-muted-foreground">Configure your dream device in 3D</p>
+        <div className="text-center flex-1">
+          <h1 className="text-3xl lg:text-5xl font-display font-bold mb-2">
+            <span className="glow-text">Virtual</span>{' '}
+            <span className="text-foreground">Product Studio</span>
+          </h1>
+          <p className="text-muted-foreground">Configure your dream device in 3D</p>
+        </div>
+
+        {/* Header Actions */}
+        <div className="flex items-center gap-3">
+          {/* Compare Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsCompareOpen(true)}
+            className="relative p-3 glass-panel rounded-xl hover:bg-secondary/50 transition-colors"
+          >
+            <GitCompare size={22} />
+            {compareItems.length > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-xs rounded-full flex items-center justify-center">
+                {compareItems.length}
+              </span>
+            )}
+          </motion.button>
+
+          {/* Cart Button */}
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsCartOpen(true)}
+            className="relative p-3 glass-panel rounded-xl hover:bg-secondary/50 transition-colors"
+          >
+            <ShoppingCart size={22} />
+            {itemCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-xs rounded-full flex items-center justify-center">
+                {itemCount}
+              </span>
+            )}
+          </motion.button>
+        </div>
       </motion.header>
 
       {/* Main Layout */}
@@ -115,7 +188,12 @@ const Index = () => {
               transition={{ duration: 0.3 }}
               className="absolute inset-0"
             >
-              <ProductScene productType={selectedProduct.id} color={selectedColor.hex} />
+              <ProductScene 
+                productType={selectedProduct.id} 
+                color={selectedColor.hex}
+                cameraPosition={cameraPosition}
+                cameraTarget={cameraTarget}
+              />
             </motion.div>
           </AnimatePresence>
           
@@ -132,13 +210,25 @@ const Index = () => {
             </motion.div>
           </div>
 
-          {/* Product Gallery */}
+          {/* Product Gallery with sync */}
           <div className="absolute bottom-4 right-4 w-64">
             <ProductGallery 
               productName={selectedProduct.name} 
-              colorName={selectedColor.name} 
+              colorName={selectedColor.name}
+              selectedView={cameraView}
+              onViewChange={handleViewChange}
             />
           </div>
+
+          {/* Compare indicator */}
+          {isInCompare(selectedProduct.id) && (
+            <div className="absolute top-4 right-4">
+              <span className="bg-primary/20 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-2">
+                <GitCompare size={14} />
+                In Compare
+              </span>
+            </div>
+          )}
         </motion.main>
 
         {/* Customization Panel */}
@@ -150,6 +240,9 @@ const Index = () => {
           onColorSelect={handleColorSelect}
           onVariantSelect={handleVariantSelect}
           onOrder={handleOrder}
+          onAddToCart={handleAddToCart}
+          onAddToCompare={handleAddToCompare}
+          isInCompare={isInCompare(selectedProduct.id)}
         />
       </div>
 
@@ -162,6 +255,25 @@ const Index = () => {
       >
         <p>© 2026 Virtual Product Studio. All products are for demonstration purposes.</p>
       </motion.footer>
+
+      {/* Cart Drawer */}
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        items={items}
+        cartTotal={cartTotal}
+        onUpdateQuantity={updateQuantity}
+        onRemove={removeFromCart}
+        onClear={clearCart}
+      />
+
+      {/* Compare Modal */}
+      <CompareModal
+        isOpen={isCompareOpen}
+        onClose={() => setIsCompareOpen(false)}
+        items={compareItems}
+        onRemove={removeFromCompare}
+      />
     </div>
   );
 };

@@ -1,12 +1,15 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, Float, Sparkles } from '@react-three/drei';
-import { Suspense } from 'react';
+import { Suspense, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { ProductModel } from './ProductModel';
 import { ProductType } from '@/types/product';
+import * as THREE from 'three';
 
 interface ProductSceneProps {
   productType: ProductType;
   color: string;
+  cameraPosition?: [number, number, number];
+  cameraTarget?: [number, number, number];
 }
 
 const LoadingFallback = () => (
@@ -16,10 +19,61 @@ const LoadingFallback = () => (
   </mesh>
 );
 
-export const ProductScene = ({ productType, color }: ProductSceneProps) => {
+interface CameraControllerProps {
+  position: [number, number, number];
+  target: [number, number, number];
+}
+
+const CameraController = ({ position, target }: CameraControllerProps) => {
+  const controlsRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (controlsRef.current) {
+      const controls = controlsRef.current;
+      
+      // Animate camera position
+      const startPos = controls.object.position.clone();
+      const endPos = new THREE.Vector3(...position);
+      const startTarget = controls.target.clone();
+      const endTarget = new THREE.Vector3(...target);
+      
+      let progress = 0;
+      const animate = () => {
+        progress += 0.05;
+        if (progress <= 1) {
+          controls.object.position.lerpVectors(startPos, endPos, progress);
+          controls.target.lerpVectors(startTarget, endTarget, progress);
+          controls.update();
+          requestAnimationFrame(animate);
+        }
+      };
+      animate();
+    }
+  }, [position, target]);
+
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      enablePan={false}
+      minPolarAngle={Math.PI / 4}
+      maxPolarAngle={Math.PI / 1.5}
+      minDistance={3}
+      maxDistance={10}
+      autoRotate
+      autoRotateSpeed={0.5}
+    />
+  );
+};
+
+export const ProductScene = ({ 
+  productType, 
+  color, 
+  cameraPosition = [0, 0, 6],
+  cameraTarget = [0, 0, 0]
+}: ProductSceneProps) => {
   return (
     <Canvas
-      camera={{ position: [0, 0, 6], fov: 45 }}
+      camera={{ position: cameraPosition, fov: 45 }}
       gl={{ antialias: true, alpha: true }}
       dpr={[1, 2]}
     >
@@ -77,16 +131,8 @@ export const ProductScene = ({ productType, color }: ProductSceneProps) => {
         />
       </Suspense>
       
-      {/* Controls */}
-      <OrbitControls
-        enablePan={false}
-        minPolarAngle={Math.PI / 4}
-        maxPolarAngle={Math.PI / 1.5}
-        minDistance={3}
-        maxDistance={10}
-        autoRotate
-        autoRotateSpeed={1}
-      />
+      {/* Controls with camera animation */}
+      <CameraController position={cameraPosition} target={cameraTarget} />
     </Canvas>
   );
 };
