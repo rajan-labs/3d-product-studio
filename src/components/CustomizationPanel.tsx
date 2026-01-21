@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { ShoppingCart, GitCompare } from 'lucide-react';
 import { Product, ProductColor } from '@/types/product';
 
 interface CustomizationPanelProps {
@@ -9,6 +10,9 @@ interface CustomizationPanelProps {
   onColorSelect: (color: ProductColor) => void;
   onVariantSelect: (variantId: string, optionId: string) => void;
   onOrder: () => void;
+  onAddToCart: () => void;
+  onAddToCompare: () => void;
+  isInCompare: boolean;
 }
 
 export const CustomizationPanel = ({
@@ -19,6 +23,9 @@ export const CustomizationPanel = ({
   onColorSelect,
   onVariantSelect,
   onOrder,
+  onAddToCart,
+  onAddToCompare,
+  isInCompare,
 }: CustomizationPanelProps) => {
   return (
     <motion.aside
@@ -110,6 +117,32 @@ export const CustomizationPanel = ({
         <div className="flex justify-between items-center mb-6">
           <span className="text-lg text-muted-foreground">Total Price</span>
           <span className="price-display">${totalPrice.toLocaleString()}</span>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-2 mb-4">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onAddToCart}
+            className="flex-1 flex items-center justify-center gap-2 py-3 bg-secondary hover:bg-secondary/80 rounded-xl transition-colors"
+          >
+            <ShoppingCart size={18} />
+            Add to Cart
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={onAddToCompare}
+            disabled={isInCompare}
+            className={`p-3 rounded-xl transition-colors ${
+              isInCompare 
+                ? 'bg-primary/20 text-primary cursor-not-allowed' 
+                : 'bg-secondary hover:bg-secondary/80'
+            }`}
+          >
+            <GitCompare size={18} />
+          </motion.button>
         </div>
         
         <motion.button
