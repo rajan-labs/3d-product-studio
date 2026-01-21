@@ -77,7 +77,7 @@ export const ProductScene = ({
       gl={{ antialias: true, alpha: true }}
       dpr={[1, 2]}
     >
-      <color attach="background" args={['#0a0a0f']} />
+      <color attach="background" args={['transparent']} />
       
       {/* Lighting */}
       <ambientLight intensity={0.4} />
