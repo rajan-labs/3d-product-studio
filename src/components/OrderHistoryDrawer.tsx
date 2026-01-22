@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Package, Clock, CheckCircle, Truck, MapPin } from 'lucide-react';
+import { X, Package, Clock, CheckCircle, Truck } from 'lucide-react';
 import { OrderItem } from '@/hooks/useOrderHistory';
+import { getDeviceTypeIcon } from '@/data/categories';
 
 interface OrderHistoryDrawerProps {
   isOpen: boolean;
@@ -72,6 +73,7 @@ export const OrderHistoryDrawer = ({
               ) : (
                 orders.map((order) => {
                   const StatusIcon = statusIcons[order.status];
+                  const Icon = getDeviceTypeIcon(order.product.deviceType);
                   return (
                     <motion.div
                       key={order.id}
@@ -81,14 +83,16 @@ export const OrderHistoryDrawer = ({
                       className="bg-secondary/50 rounded-xl p-4"
                     >
                       <div className="flex justify-between items-start mb-3">
-                        <div>
-                          <h3 className="font-semibold flex items-center gap-2">
-                            <span>{order.product.icon}</span>
-                            {order.product.name}
-                          </h3>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {order.id}
-                          </p>
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-primary/10 rounded-lg">
+                            <Icon size={18} className="text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{order.product.name}</h3>
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              {order.id}
+                            </p>
+                          </div>
                         </div>
                         <span className="text-primary font-bold">
                           ${order.totalPrice.toLocaleString()}
