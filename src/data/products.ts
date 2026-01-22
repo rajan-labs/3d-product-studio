@@ -1,12 +1,15 @@
 import { Product } from '@/types/product';
 
 export const products: Product[] = [
+  // MOBILE PHONES
   {
     id: 'mobile',
-    name: 'Quantum Phone',
+    name: 'Quantum Phone Pro',
     basePrice: 999,
     description: 'Next-gen smartphone with holographic display',
-    icon: '📱',
+    brandId: 'quantum',
+    brandName: 'Quantum',
+    deviceType: 'mobile',
     colors: [
       { id: 'midnight', name: 'Midnight Black', hex: '#1a1a2e', price: 0 },
       { id: 'arctic', name: 'Arctic Silver', hex: '#c0c0c0', price: 0 },
@@ -46,12 +49,15 @@ export const products: Product[] = [
       },
     ],
   },
+  // LAPTOPS
   {
     id: 'laptop',
     name: 'NovaPro Laptop',
     basePrice: 1499,
     description: 'Ultra-thin powerhouse for professionals',
-    icon: '💻',
+    brandId: 'novapro',
+    brandName: 'NovaPro',
+    deviceType: 'laptop',
     colors: [
       { id: 'space', name: 'Space Gray', hex: '#374151', price: 0 },
       { id: 'silver', name: 'Pure Silver', hex: '#e5e7eb', price: 0 },
@@ -89,23 +95,17 @@ export const products: Product[] = [
           { id: '2tb', label: '2 TB SSD', price: 400 },
         ],
       },
-      {
-        id: 'webcam',
-        name: 'Webcam',
-        options: [
-          { id: '720p', label: '720p HD', price: 0 },
-          { id: '1080p', label: '1080p FHD', price: 50 },
-          { id: '4k', label: '4K Ultra', price: 150 },
-        ],
-      },
     ],
   },
+  // DESKTOP PCs
   {
     id: 'pc',
     name: 'TitanX Desktop',
     basePrice: 2499,
     description: 'Ultimate gaming and creative workstation',
-    icon: '🖥️',
+    brandId: 'titanx',
+    brandName: 'TitanX',
+    deviceType: 'pc',
     colors: [
       { id: 'obsidian', name: 'Obsidian Black', hex: '#0f0f0f', price: 0 },
       { id: 'white', name: 'Arctic White', hex: '#f8fafc', price: 50 },
@@ -142,12 +142,15 @@ export const products: Product[] = [
       },
     ],
   },
+  // TABLETS
   {
     id: 'tablet',
     name: 'Canvas Pro',
     basePrice: 799,
     description: 'Creative tablet for artists and designers',
-    icon: '📲',
+    brandId: 'canvas',
+    brandName: 'Canvas',
+    deviceType: 'tablet',
     colors: [
       { id: 'slate', name: 'Slate Gray', hex: '#64748b', price: 0 },
       { id: 'white', name: 'Pearl White', hex: '#f1f5f9', price: 0 },
@@ -182,23 +185,17 @@ export const products: Product[] = [
           { id: 'pro', label: 'Pro Stylus', price: 199 },
         ],
       },
-      {
-        id: 'camera',
-        name: 'Camera',
-        options: [
-          { id: '8mp', label: '8 MP', price: 0 },
-          { id: '12mp', label: '12 MP', price: 50 },
-          { id: '12mp-pro', label: '12 MP Pro Wide', price: 100 },
-        ],
-      },
     ],
   },
+  // SMART WATCHES
   {
     id: 'watch',
     name: 'Pulse Ultra',
     basePrice: 399,
     description: 'Smart fitness watch with health monitoring',
-    icon: '⌚',
+    brandId: 'pulse',
+    brandName: 'Pulse',
+    deviceType: 'watch',
     colors: [
       { id: 'graphite', name: 'Graphite', hex: '#1f2937', price: 0 },
       { id: 'silver', name: 'Silver', hex: '#d1d5db', price: 0 },
@@ -235,12 +232,15 @@ export const products: Product[] = [
       },
     ],
   },
+  // SMART TVs
   {
     id: 'tv',
     name: 'Visionary OLED',
     basePrice: 1999,
     description: 'Immersive 4K OLED smart television',
-    icon: '📺',
+    brandId: 'visionary',
+    brandName: 'Visionary',
+    deviceType: 'tv',
     colors: [
       { id: 'black', name: 'Classic Black', hex: '#171717', price: 0 },
       { id: 'silver', name: 'Brushed Silver', hex: '#a1a1aa', price: 100 },
@@ -276,12 +276,15 @@ export const products: Product[] = [
       },
     ],
   },
+  // CAMERAS
   {
     id: 'camera',
     name: 'ProShot DSLR',
     basePrice: 1299,
     description: 'Professional mirrorless camera for creators',
-    icon: '📷',
+    brandId: 'proshot',
+    brandName: 'ProShot',
+    deviceType: 'camera',
     colors: [
       { id: 'black', name: 'Classic Black', hex: '#1a1a1a', price: 0 },
       { id: 'silver', name: 'Silver Chrome', hex: '#c0c0c0', price: 100 },
@@ -315,26 +318,19 @@ export const products: Product[] = [
           { id: '4k30', label: '4K 30fps', price: 0 },
           { id: '4k60', label: '4K 60fps', price: 200 },
           { id: '8k30', label: '8K 30fps', price: 600 },
-          { id: '8k60', label: '8K 60fps RAW', price: 1200 },
-        ],
-      },
-      {
-        id: 'stabilization',
-        name: 'Stabilization',
-        options: [
-          { id: 'none', label: 'No IBIS', price: 0 },
-          { id: '5axis', label: '5-Axis IBIS', price: 300 },
-          { id: '8stop', label: '8-Stop IBIS Pro', price: 600 },
         ],
       },
     ],
   },
+  // DRONES
   {
     id: 'drone',
     name: 'SkyPro X1',
     basePrice: 899,
     description: 'Professional aerial photography drone',
-    icon: '🚁',
+    brandId: 'skypro',
+    brandName: 'SkyPro',
+    deviceType: 'drone',
     colors: [
       { id: 'gray', name: 'Stealth Gray', hex: '#4b5563', price: 0 },
       { id: 'white', name: 'Arctic White', hex: '#f1f5f9', price: 0 },
@@ -359,17 +355,6 @@ export const products: Product[] = [
           { id: '20min', label: '20 Minutes', price: 0 },
           { id: '35min', label: '35 Minutes', price: 150 },
           { id: '45min', label: '45 Minutes', price: 300 },
-          { id: '60min', label: '60 Min Extended', price: 500 },
-        ],
-      },
-      {
-        id: 'obstacle',
-        name: 'Obstacle Avoidance',
-        options: [
-          { id: 'front', label: 'Front Only', price: 0 },
-          { id: 'front-back', label: 'Front + Back', price: 100 },
-          { id: '360', label: '360° Sensors', price: 250 },
-          { id: 'ai', label: 'AI Navigation', price: 500 },
         ],
       },
       {
@@ -379,17 +364,19 @@ export const products: Product[] = [
           { id: '2km', label: '2 km', price: 0 },
           { id: '5km', label: '5 km', price: 100 },
           { id: '10km', label: '10 km', price: 250 },
-          { id: '15km', label: '15 km Pro', price: 400 },
         ],
       },
     ],
   },
+  // VR HEADSETS
   {
     id: 'vr',
     name: 'VisionX Pro',
     basePrice: 499,
     description: 'Immersive virtual reality headset',
-    icon: '🥽',
+    brandId: 'visionx',
+    brandName: 'VisionX',
+    deviceType: 'vr',
     colors: [
       { id: 'black', name: 'Matte Black', hex: '#1a1a1a', price: 0 },
       { id: 'white', name: 'Pure White', hex: '#f8fafc', price: 0 },
@@ -413,7 +400,6 @@ export const products: Product[] = [
           { id: '72hz', label: '72 Hz', price: 0 },
           { id: '90hz', label: '90 Hz', price: 100 },
           { id: '120hz', label: '120 Hz', price: 200 },
-          { id: '144hz', label: '144 Hz Pro', price: 350 },
         ],
       },
       {
@@ -423,18 +409,153 @@ export const products: Product[] = [
           { id: 'standard', label: 'Standard Controllers', price: 0 },
           { id: 'haptic', label: 'Haptic Controllers', price: 150 },
           { id: 'pro', label: 'Pro Controllers', price: 250 },
-          { id: 'gloves', label: 'Haptic Gloves', price: 500 },
+        ],
+      },
+    ],
+  },
+  // AUDIO - Headphones
+  {
+    id: 'audio',
+    name: 'Sonic Elite Pro',
+    basePrice: 349,
+    description: 'Premium wireless noise-canceling headphones',
+    brandId: 'sonic',
+    brandName: 'Sonic',
+    deviceType: 'audio',
+    colors: [
+      { id: 'black', name: 'Stealth Black', hex: '#171717', price: 0 },
+      { id: 'white', name: 'Pearl White', hex: '#f5f5f5', price: 0 },
+      { id: 'navy', name: 'Navy Blue', hex: '#1e3a5f', price: 25 },
+      { id: 'olive', name: 'Olive Green', hex: '#556b2f', price: 25 },
+    ],
+    variants: [
+      {
+        id: 'driver',
+        name: 'Driver Size',
+        options: [
+          { id: '40mm', label: '40mm Drivers', price: 0 },
+          { id: '50mm', label: '50mm Drivers', price: 50 },
+          { id: '60mm', label: '60mm Planar', price: 150 },
         ],
       },
       {
-        id: 'tracking',
-        name: 'Tracking',
+        id: 'anc',
+        name: 'Noise Cancellation',
         options: [
-          { id: 'inside', label: 'Inside-Out', price: 0 },
-          { id: 'base', label: 'Base Stations', price: 200 },
-          { id: 'full', label: 'Full Body Kit', price: 600 },
+          { id: 'passive', label: 'Passive Only', price: 0 },
+          { id: 'active', label: 'Active ANC', price: 80 },
+          { id: 'adaptive', label: 'Adaptive ANC Pro', price: 150 },
+        ],
+      },
+      {
+        id: 'battery',
+        name: 'Battery Life',
+        options: [
+          { id: '20hr', label: '20 Hours', price: 0 },
+          { id: '40hr', label: '40 Hours', price: 50 },
+          { id: '60hr', label: '60 Hours', price: 100 },
+        ],
+      },
+    ],
+  },
+  // GAMING - Console
+  {
+    id: 'gaming',
+    name: 'NexPlay Station',
+    basePrice: 499,
+    description: 'Next-generation gaming console',
+    brandId: 'nexplay',
+    brandName: 'NexPlay',
+    deviceType: 'gaming',
+    colors: [
+      { id: 'black', name: 'Cosmic Black', hex: '#0a0a0a', price: 0 },
+      { id: 'white', name: 'Stellar White', hex: '#fafafa', price: 0 },
+      { id: 'blue', name: 'Deep Blue', hex: '#1e40af', price: 50 },
+      { id: 'red', name: 'Volcano Red', hex: '#b91c1c', price: 50 },
+    ],
+    variants: [
+      {
+        id: 'storage',
+        name: 'Storage',
+        options: [
+          { id: '512gb', label: '512 GB SSD', price: 0 },
+          { id: '1tb', label: '1 TB SSD', price: 100 },
+          { id: '2tb', label: '2 TB SSD', price: 250 },
+        ],
+      },
+      {
+        id: 'edition',
+        name: 'Edition',
+        options: [
+          { id: 'standard', label: 'Standard', price: 0 },
+          { id: 'digital', label: 'Digital Only', price: -50 },
+          { id: 'pro', label: 'Pro Edition', price: 200 },
+        ],
+      },
+      {
+        id: 'controller',
+        name: 'Extra Controller',
+        options: [
+          { id: 'none', label: 'No Extra', price: 0 },
+          { id: 'one', label: '+1 Controller', price: 70 },
+          { id: 'two', label: '+2 Controllers', price: 130 },
+        ],
+      },
+    ],
+  },
+  // ACCESSORIES - Keyboard
+  {
+    id: 'accessories',
+    name: 'TechMate Pro Keys',
+    basePrice: 199,
+    description: 'Mechanical wireless keyboard with RGB',
+    brandId: 'techmate',
+    brandName: 'TechMate',
+    deviceType: 'accessories',
+    colors: [
+      { id: 'black', name: 'Stealth Black', hex: '#1a1a1a', price: 0 },
+      { id: 'white', name: 'Arctic White', hex: '#f5f5f5', price: 0 },
+      { id: 'pink', name: 'Sakura Pink', hex: '#f9a8d4', price: 30 },
+      { id: 'mint', name: 'Mint Green', hex: '#a7f3d0', price: 30 },
+    ],
+    variants: [
+      {
+        id: 'switches',
+        name: 'Switch Type',
+        options: [
+          { id: 'linear', label: 'Linear Red', price: 0 },
+          { id: 'tactile', label: 'Tactile Brown', price: 0 },
+          { id: 'clicky', label: 'Clicky Blue', price: 0 },
+          { id: 'silent', label: 'Silent Pink', price: 20 },
+        ],
+      },
+      {
+        id: 'layout',
+        name: 'Layout',
+        options: [
+          { id: 'full', label: 'Full Size', price: 0 },
+          { id: 'tkl', label: 'TKL (87 Keys)', price: 0 },
+          { id: '75', label: '75% Compact', price: 20 },
+          { id: '60', label: '60% Mini', price: 30 },
+        ],
+      },
+      {
+        id: 'keycaps',
+        name: 'Keycaps',
+        options: [
+          { id: 'abs', label: 'ABS Standard', price: 0 },
+          { id: 'pbt', label: 'PBT Premium', price: 40 },
+          { id: 'pudding', label: 'Pudding Caps', price: 50 },
         ],
       },
     ],
   },
 ];
+
+export const getProductsByDeviceType = (deviceType: string): Product[] => {
+  return products.filter(p => p.deviceType === deviceType);
+};
+
+export const getProductsByBrand = (brandId: string): Product[] => {
+  return products.filter(p => p.brandId === brandId);
+};

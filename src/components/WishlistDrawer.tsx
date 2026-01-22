@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Heart, ShoppingCart, Trash2 } from 'lucide-react';
 import { WishlistItem } from '@/hooks/useWishlistStore';
+import { getDeviceTypeIcon } from '@/data/categories';
 
 interface WishlistDrawerProps {
   isOpen: boolean;
@@ -62,47 +63,52 @@ export const WishlistDrawer = ({
                   <p>Your wishlist is empty</p>
                 </div>
               ) : (
-                items.map((item) => (
-                  <motion.div
-                    key={item.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, x: 100 }}
-                    className="bg-secondary/50 rounded-xl p-4"
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="font-semibold flex items-center gap-2">
-                          <span>{item.product.icon}</span>
-                          {item.product.name}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          {item.selectedColor.name}
-                        </p>
+                items.map((item) => {
+                  const Icon = getDeviceTypeIcon(item.product.deviceType);
+                  return (
+                    <motion.div
+                      key={item.id}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, x: 100 }}
+                      className="bg-secondary/50 rounded-xl p-4"
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-primary/10 rounded-lg">
+                            <Icon size={18} className="text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{item.product.name}</h3>
+                            <p className="text-sm text-muted-foreground">
+                              {item.selectedColor.name}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="text-primary font-bold">
+                          ${item.totalPrice.toLocaleString()}
+                        </span>
                       </div>
-                      <span className="text-primary font-bold">
-                        ${item.totalPrice.toLocaleString()}
-                      </span>
-                    </div>
 
-                    <div className="flex gap-2 mt-3">
-                      <button
-                        onClick={() => onMoveToCart(item)}
-                        className="flex-1 flex items-center justify-center gap-2 py-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-colors text-sm"
-                      >
-                        <ShoppingCart size={14} />
-                        Move to Cart
-                      </button>
-                      <button
-                        onClick={() => onRemove(item.id)}
-                        className="p-2 bg-destructive/20 text-destructive rounded-lg hover:bg-destructive/30 transition-colors"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  </motion.div>
-                ))
+                      <div className="flex gap-2 mt-3">
+                        <button
+                          onClick={() => onMoveToCart(item)}
+                          className="flex-1 flex items-center justify-center gap-2 py-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-colors text-sm"
+                        >
+                          <ShoppingCart size={14} />
+                          Move to Cart
+                        </button>
+                        <button
+                          onClick={() => onRemove(item.id)}
+                          className="p-2 bg-destructive/20 text-destructive rounded-lg hover:bg-destructive/30 transition-colors"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  );
+                })
               )}
             </div>
 

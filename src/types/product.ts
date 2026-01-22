@@ -1,4 +1,4 @@
-export type ProductType = 'mobile' | 'laptop' | 'pc' | 'tablet' | 'watch' | 'tv' | 'camera' | 'drone' | 'vr';
+export type ProductType = 'mobile' | 'laptop' | 'pc' | 'tablet' | 'watch' | 'tv' | 'camera' | 'drone' | 'vr' | 'audio' | 'gaming' | 'accessories';
 
 export interface ProductColor {
   id: string;
@@ -22,7 +22,9 @@ export interface Product {
   name: string;
   basePrice: number;
   description: string;
-  icon: string;
+  brandId: string;
+  brandName: string;
+  deviceType: string;
   colors: ProductColor[];
   variants: ProductVariant[];
 }

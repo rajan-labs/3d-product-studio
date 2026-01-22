@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Settings, ChevronUp, ChevronDown } from 'lucide-react';
+import { ShoppingBag, Settings } from 'lucide-react';
 import { useState } from 'react';
 import { Product, ProductColor } from '@/types/product';
+import { getDeviceTypeIcon } from '@/data/categories';
 
 interface BottomBarProps {
   product: Product;
@@ -22,9 +23,9 @@ export const BottomBar = ({
   onColorSelect,
   onVariantSelect,
   onOrder,
-  onAddToCart,
 }: BottomBarProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const Icon = getDeviceTypeIcon(product.deviceType);
 
   return (
     <motion.div
@@ -52,8 +53,8 @@ export const BottomBar = ({
                       onClick={() => onColorSelect(color)}
                       className={`w-8 h-8 rounded-full border-2 transition-all ${
                         selectedColor.id === color.id
-                          ? 'border-primary scale-110'
-                          : 'border-transparent'
+                          ? 'border-primary scale-110 ring-2 ring-primary/30'
+                          : 'border-transparent hover:scale-105'
                       }`}
                       style={{ backgroundColor: color.hex }}
                       title={color.name}
@@ -71,9 +72,9 @@ export const BottomBar = ({
                       <button
                         key={option.id}
                         onClick={() => onVariantSelect(variant.id, option.id)}
-                        className={`px-3 py-1.5 rounded-lg text-xs transition-all ${
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                           selectedVariants[variant.id] === option.id
-                            ? 'bg-primary text-primary-foreground'
+                            ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
                             : 'bg-secondary hover:bg-secondary/80'
                         }`}
                       >
@@ -95,12 +96,14 @@ export const BottomBar = ({
 
       {/* Main Bar */}
       <div className="glass-panel border-t border-border">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
           {/* Product Info */}
-          <div className="flex items-center gap-3 min-w-0">
-            <span className="text-2xl">{product.icon}</span>
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="p-2 bg-primary/10 rounded-xl">
+              <Icon size={20} className="text-primary" />
+            </div>
             <div className="min-w-0">
-              <h3 className="font-semibold truncate">{product.name}</h3>
+              <h3 className="font-semibold text-sm truncate">{product.name}</h3>
               <p className="text-xs text-muted-foreground truncate">
                 {selectedColor.name}
               </p>
@@ -112,14 +115,16 @@ export const BottomBar = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-2 bg-secondary rounded-lg hover:bg-secondary/80 transition-colors"
+            className={`p-2.5 rounded-xl transition-all ${
+              isExpanded ? 'bg-primary/20 text-primary' : 'bg-secondary hover:bg-secondary/80'
+            }`}
           >
-            <Settings size={18} className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+            <Settings size={18} className={`transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`} />
           </motion.button>
 
           {/* Price */}
           <div className="text-right">
-            <p className="text-xs text-muted-foreground">Total</p>
+            <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total</p>
             <p className="text-lg font-bold text-primary">${totalPrice.toLocaleString()}</p>
           </div>
 
@@ -128,7 +133,7 @@ export const BottomBar = ({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onOrder}
-            className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-lg"
+            className="flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-lg shadow-primary/25"
           >
             <ShoppingBag size={18} />
             <span className="hidden sm:inline">Order Now</span>

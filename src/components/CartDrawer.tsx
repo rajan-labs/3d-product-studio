@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
 import { CartItem } from '@/hooks/useCartStore';
+import { getDeviceTypeIcon } from '@/data/categories';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -22,7 +23,7 @@ export const CartDrawer = ({
   onClear
 }: CartDrawerProps) => {
   const handleCheckout = () => {
-    console.log('🛒 Checkout:', { items, total: cartTotal });
+    console.log('Checkout:', { items, total: cartTotal });
     alert(`Checkout initiated!\nItems: ${items.length}\nTotal: $${cartTotal.toLocaleString()}`);
   };
 
@@ -69,56 +70,59 @@ export const CartDrawer = ({
                   <p className="text-muted-foreground">Your cart is empty</p>
                 </div>
               ) : (
-                items.map(item => (
-                  <motion.div
-                    key={item.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, x: 100 }}
-                    className="glass-panel p-4 rounded-xl"
-                  >
-                    <div className="flex gap-4">
-                      <div 
-                        className="w-16 h-16 rounded-lg flex items-center justify-center text-3xl"
-                        style={{ backgroundColor: `${item.color.hex}20` }}
-                      >
-                        {item.product.icon}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold">{item.product.name}</h3>
-                        <p className="text-sm text-muted-foreground">{item.color.name}</p>
-                        <p className="text-primary font-semibold mt-1">
-                          ${item.totalPrice.toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
-                          className="p-1 hover:bg-secondary rounded transition-colors"
+                items.map(item => {
+                  const Icon = getDeviceTypeIcon(item.product.deviceType);
+                  return (
+                    <motion.div
+                      key={item.id}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, x: 100 }}
+                      className="glass-panel p-4 rounded-xl"
+                    >
+                      <div className="flex gap-4">
+                        <div 
+                          className="w-16 h-16 rounded-lg flex items-center justify-center"
+                          style={{ backgroundColor: `${item.color.hex}20` }}
                         >
-                          <Minus size={16} />
-                        </button>
-                        <span className="w-8 text-center">{item.quantity}</span>
+                          <Icon size={24} className="text-foreground" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold">{item.product.name}</h3>
+                          <p className="text-sm text-muted-foreground">{item.color.name}</p>
+                          <p className="text-primary font-semibold mt-1">
+                            ${item.totalPrice.toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between mt-4">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                            className="p-1 hover:bg-secondary rounded transition-colors"
+                          >
+                            <Minus size={16} />
+                          </button>
+                          <span className="w-8 text-center">{item.quantity}</span>
+                          <button
+                            onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                            className="p-1 hover:bg-secondary rounded transition-colors"
+                          >
+                            <Plus size={16} />
+                          </button>
+                        </div>
                         <button
-                          onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-                          className="p-1 hover:bg-secondary rounded transition-colors"
+                          onClick={() => onRemove(item.id)}
+                          className="p-2 text-destructive hover:bg-destructive/10 rounded transition-colors"
                         >
-                          <Plus size={16} />
+                          <Trash2 size={16} />
                         </button>
                       </div>
-                      <button
-                        onClick={() => onRemove(item.id)}
-                        className="p-2 text-destructive hover:bg-destructive/10 rounded transition-colors"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </motion.div>
-                ))
+                    </motion.div>
+                  );
+                })
               )}
             </div>
 

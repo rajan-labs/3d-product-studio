@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight } from 'lucide-react';
+import { X } from 'lucide-react';
 import { CompareItem } from '@/hooks/useCompareStore';
+import { getDeviceTypeIcon } from '@/data/categories';
 
 interface CompareModalProps {
   isOpen: boolean;
@@ -54,20 +55,25 @@ export const CompareModal = ({ isOpen, onClose, items, onRemove }: CompareModalP
                     <thead>
                       <tr>
                         <th className="text-left p-4 bg-secondary/30 rounded-tl-lg">Feature</th>
-                        {items.map((item, index) => (
-                          <th key={item.product.id} className={`text-center p-4 bg-secondary/30 ${index === items.length - 1 ? 'rounded-tr-lg' : ''}`}>
-                            <div className="flex flex-col items-center gap-2">
-                              <button
-                                onClick={() => onRemove(item.product.id)}
-                                className="absolute top-2 right-2 p-1 hover:bg-destructive/20 rounded text-destructive"
-                              >
-                                <X size={14} />
-                              </button>
-                              <span className="text-4xl">{item.product.icon}</span>
-                              <span className="font-semibold">{item.product.name}</span>
-                            </div>
-                          </th>
-                        ))}
+                        {items.map((item, index) => {
+                          const Icon = getDeviceTypeIcon(item.product.deviceType);
+                          return (
+                            <th key={item.product.id} className={`text-center p-4 bg-secondary/30 relative ${index === items.length - 1 ? 'rounded-tr-lg' : ''}`}>
+                              <div className="flex flex-col items-center gap-2">
+                                <button
+                                  onClick={() => onRemove(item.product.id)}
+                                  className="absolute top-2 right-2 p-1 hover:bg-destructive/20 rounded text-destructive"
+                                >
+                                  <X size={14} />
+                                </button>
+                                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                                  <Icon size={24} className="text-primary" />
+                                </div>
+                                <span className="font-semibold">{item.product.name}</span>
+                              </div>
+                            </th>
+                          );
+                        })}
                       </tr>
                     </thead>
                     <tbody>
@@ -79,6 +85,16 @@ export const CompareModal = ({ isOpen, onClose, items, onRemove }: CompareModalP
                             <span className="text-xl font-bold text-primary">
                               ${item.totalPrice.toLocaleString()}
                             </span>
+                          </td>
+                        ))}
+                      </tr>
+                      
+                      {/* Brand */}
+                      <tr className="border-b border-border/50">
+                        <td className="p-4 text-muted-foreground">Brand</td>
+                        {items.map(item => (
+                          <td key={item.product.id} className="p-4 text-center">
+                            {item.product.brandName}
                           </td>
                         ))}
                       </tr>
