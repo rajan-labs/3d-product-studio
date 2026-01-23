@@ -177,6 +177,21 @@ export const categories: Category[] = [
   },
 ];
 
+export const deviceTypeLabels: Record<string, string> = {
+  mobile: 'Mobile Phones',
+  laptop: 'Laptops',
+  tablet: 'Tablets',
+  pc: 'Desktop PCs',
+  watch: 'Smart Watches',
+  camera: 'Cameras',
+  tv: 'Smart TVs',
+  drone: 'Drones',
+  vr: 'VR Headsets',
+  audio: 'Audio',
+  gaming: 'Gaming',
+  accessories: 'Accessories',
+};
+
 export const getDeviceTypeIcon = (deviceTypeId: string) => {
   const iconMap: Record<string, typeof Smartphone> = {
     mobile: Smartphone,

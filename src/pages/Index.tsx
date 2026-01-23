@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, GitCompare, Heart, Package, Sun, Moon } from 'lucide-react';
+import { ShoppingCart, GitCompare, Heart, Package, Sun, Moon, Star } from 'lucide-react';
 import { ProductScene } from '@/components/3d/ProductScene';
 import { ProductSidebar } from '@/components/ProductSidebar';
 import { ProductGallery } from '@/components/ProductGallery';
@@ -9,6 +9,10 @@ import { CompareModal } from '@/components/CompareModal';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
 import { OrderHistoryDrawer } from '@/components/OrderHistoryDrawer';
 import { BottomBar } from '@/components/BottomBar';
+import { Breadcrumb } from '@/components/Breadcrumb';
+import { ProductRatingBadge } from '@/components/ProductRatingBadge';
+import { ProductReviews } from '@/components/ProductReviews';
+import { CheckoutModal } from '@/components/CheckoutModal';
 import { useCartStore } from '@/hooks/useCartStore';
 import { useCompareStore } from '@/hooks/useCompareStore';
 import { useWishlistStore } from '@/hooks/useWishlistStore';
@@ -16,8 +20,10 @@ import { useOrderHistory } from '@/hooks/useOrderHistory';
 import { useTheme } from '@/hooks/useTheme';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { products } from '@/data/products';
+import { getReviewsForProduct, getAverageRating, getReviewCount } from '@/data/reviews';
 import { getDeviceTypeIcon } from '@/data/categories';
-import { Product, ProductColor } from '@/types/product';
+import { Product, ProductColor, ProductType } from '@/types/product';
+import { toast } from 'sonner';
 
 const Index = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product>(products[0]);
@@ -53,6 +59,8 @@ const Index = () => {
   const [isCompareOpen, setIsCompareOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isOrderHistoryOpen, setIsOrderHistoryOpen] = useState(false);
+  const [isReviewsOpen, setIsReviewsOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   const handleProductSelect = useCallback((product: Product) => {
     setSelectedProduct(product);
@@ -82,7 +90,6 @@ const Index = () => {
     setCameraView(viewId);
     setCameraPosition(position);
     setCameraTarget(target);
-    // Auto-collapse on mobile after selection
     if (isMobile) {
       setIsQuickViewExpanded(false);
     }
@@ -124,16 +131,19 @@ const Index = () => {
   }, [addToCart, removeFromWishlist]);
 
   const handleOrder = useCallback(() => {
-    addOrder(selectedProduct, selectedColor, selectedVariants, totalPrice);
-    
-    console.log('Order Placed:', {
-      product: selectedProduct.name,
-      color: selectedColor.name,
-      totalPrice,
+    setIsCheckoutOpen(true);
+  }, []);
+
+  const handleCheckoutComplete = useCallback(() => {
+    toast.success('Order placed successfully!', {
+      description: `Your ${selectedProduct.name} will be shipped within 3-5 business days.`,
     });
-    
-    alert(`Order placed!\n\nProduct: ${selectedProduct.name}\nColor: ${selectedColor.name}\nTotal: $${totalPrice.toLocaleString()}`);
-  }, [selectedProduct, selectedColor, selectedVariants, totalPrice, addOrder]);
+  }, [selectedProduct.name]);
+
+  // Get reviews data
+  const productReviews = getReviewsForProduct(selectedProduct.id);
+  const averageRating = selectedProduct.averageRating || getAverageRating(selectedProduct.id);
+  const reviewCount = selectedProduct.reviewCount || getReviewCount(selectedProduct.id);
 
   const ProductIcon = getDeviceTypeIcon(selectedProduct.deviceType);
 
@@ -250,13 +260,18 @@ const Index = () => {
             className="w-full h-full"
           >
             <ProductScene 
-              productType={selectedProduct.id} 
+              productType={selectedProduct.productType} 
               color={selectedColor.hex}
               cameraPosition={cameraPosition}
               cameraTarget={cameraTarget}
             />
           </motion.div>
         </AnimatePresence>
+        
+        {/* Breadcrumb Navigation */}
+        <div className="absolute top-2 left-4 lg:left-80 z-10">
+          <Breadcrumb product={selectedProduct} />
+        </div>
         
         {/* Product name overlay - Responsive */}
         <div className="absolute bottom-24 lg:bottom-28 left-4 lg:left-80 pointer-events-none">
@@ -274,11 +289,19 @@ const Index = () => {
               <p className="text-[10px] lg:text-xs text-muted-foreground">{selectedProduct.brandName}</p>
             </div>
           </motion.div>
+          
+          {/* Rating Badge */}
+          <div className="mt-2 pointer-events-auto">
+            <ProductRatingBadge 
+              rating={averageRating} 
+              reviewCount={reviewCount}
+              onClick={() => setIsReviewsOpen(true)}
+            />
+          </div>
         </div>
 
         {/* Product Gallery - RESPONSIVE: Desktop fixed, Mobile bottom sheet */}
         {!isMobile ? (
-          // Desktop: Fixed position on the right
           <div className="absolute bottom-28 right-4 w-56">
             <ProductGallery 
               productName={selectedProduct.name} 
@@ -288,9 +311,7 @@ const Index = () => {
             />
           </div>
         ) : (
-          // Mobile: Collapsible floating button + bottom sheet
           <>
-            {/* Floating Quick View Toggle */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -314,7 +335,6 @@ const Index = () => {
               </svg>
             </motion.button>
 
-            {/* Mobile Quick View Bottom Sheet */}
             <AnimatePresence>
               {isQuickViewExpanded && (
                 <motion.div
@@ -403,6 +423,28 @@ const Index = () => {
         isOpen={isOrderHistoryOpen}
         onClose={() => setIsOrderHistoryOpen(false)}
         orders={orders}
+      />
+
+      {/* Product Reviews Modal */}
+      <ProductReviews
+        isOpen={isReviewsOpen}
+        onClose={() => setIsReviewsOpen(false)}
+        productName={selectedProduct.name}
+        reviews={productReviews}
+        averageRating={averageRating}
+      />
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        product={{
+          product: selectedProduct,
+          selectedColor,
+          selectedVariants,
+          totalPrice,
+        }}
+        onComplete={handleCheckoutComplete}
       />
     </div>
   );
