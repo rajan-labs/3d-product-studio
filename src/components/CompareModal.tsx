@@ -1,7 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, BarChart3, Table } from 'lucide-react';
+import { useState } from 'react';
 import { CompareItem } from '@/hooks/useCompareStore';
 import { getDeviceTypeIcon } from '@/data/categories';
+import { ComparisonCharts } from './ComparisonCharts';
 
 interface CompareModalProps {
   isOpen: boolean;
@@ -11,6 +13,8 @@ interface CompareModalProps {
 }
 
 export const CompareModal = ({ isOpen, onClose, items, onRemove }: CompareModalProps) => {
+  const [viewMode, setViewMode] = useState<'table' | 'charts'>('table');
+  
   const allVariantNames = Array.from(
     new Set(items.flatMap(item => item.product.variants.map(v => v.name)))
   );
@@ -35,9 +39,33 @@ export const CompareModal = ({ isOpen, onClose, items, onRemove }: CompareModalP
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-border">
-              <h2 className="text-2xl font-display font-bold">
-                Compare Products <span className="text-primary">({items.length}/3)</span>
-              </h2>
+              <div className="flex items-center gap-4">
+                <h2 className="text-2xl font-display font-bold">
+                  Compare Products <span className="text-primary">({items.length}/3)</span>
+                </h2>
+                
+                {/* View Toggle */}
+                {items.length > 0 && (
+                  <div className="flex items-center gap-1 p-1 bg-secondary/50 rounded-lg">
+                    <button
+                      onClick={() => setViewMode('table')}
+                      className={`p-2 rounded-md transition-colors ${
+                        viewMode === 'table' ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
+                      }`}
+                    >
+                      <Table size={16} />
+                    </button>
+                    <button
+                      onClick={() => setViewMode('charts')}
+                      className={`p-2 rounded-md transition-colors ${
+                        viewMode === 'charts' ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
+                      }`}
+                    >
+                      <BarChart3 size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
               <button onClick={onClose} className="p-2 hover:bg-secondary rounded-lg transition-colors">
                 <X size={20} />
               </button>
@@ -49,6 +77,8 @@ export const CompareModal = ({ isOpen, onClose, items, onRemove }: CompareModalP
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">Add products to compare (max 3)</p>
                 </div>
+              ) : viewMode === 'charts' ? (
+                <ComparisonCharts items={items} />
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[600px]">
@@ -95,6 +125,18 @@ export const CompareModal = ({ isOpen, onClose, items, onRemove }: CompareModalP
                         {items.map(item => (
                           <td key={item.product.id} className="p-4 text-center">
                             {item.product.brandName}
+                          </td>
+                        ))}
+                      </tr>
+                      
+                      {/* Rating */}
+                      <tr className="border-b border-border/50">
+                        <td className="p-4 text-muted-foreground">Rating</td>
+                        {items.map(item => (
+                          <td key={item.product.id} className="p-4 text-center">
+                            <span className="text-primary font-medium">
+                              {item.product.averageRating?.toFixed(1) || 'N/A'}
+                            </span>
                           </td>
                         ))}
                       </tr>
