@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, GitCompare, Heart, Package, Sun, Moon, Star } from 'lucide-react';
+import { ShoppingCart, GitCompare, Heart, Package, Sun, Moon, Star, Camera } from 'lucide-react';
 import { ProductScene } from '@/components/3d/ProductScene';
 import { ProductSidebar } from '@/components/ProductSidebar';
 import { ProductGallery } from '@/components/ProductGallery';
@@ -13,6 +13,7 @@ import { Breadcrumb } from '@/components/Breadcrumb';
 import { ProductRatingBadge } from '@/components/ProductRatingBadge';
 import { ProductReviews } from '@/components/ProductReviews';
 import { CheckoutModal } from '@/components/CheckoutModal';
+import { ARPreview } from '@/components/ARPreview';
 import { useCartStore } from '@/hooks/useCartStore';
 import { useCompareStore } from '@/hooks/useCompareStore';
 import { useWishlistStore } from '@/hooks/useWishlistStore';
@@ -61,6 +62,7 @@ const Index = () => {
   const [isOrderHistoryOpen, setIsOrderHistoryOpen] = useState(false);
   const [isReviewsOpen, setIsReviewsOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isAROpen, setIsAROpen] = useState(false);
 
   const handleProductSelect = useCallback((product: Product) => {
     setSelectedProduct(product);
@@ -356,19 +358,31 @@ const Index = () => {
           </>
         )}
 
-        {/* Wishlist button */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleAddToWishlist}
-          className="absolute top-16 lg:top-20 right-4 p-2.5 lg:p-3 glass-panel rounded-full hover:bg-secondary/50 transition-colors"
-        >
-          <Heart size={18} className={`lg:w-5 lg:h-5 ${wishlistItems.some(i => i.product.id === selectedProduct.id) ? 'fill-primary text-primary' : ''}`} />
-        </motion.button>
+        {/* Wishlist & AR buttons */}
+        <div className="absolute top-16 lg:top-20 right-4 flex flex-col gap-2">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleAddToWishlist}
+            className="p-2.5 lg:p-3 glass-panel rounded-full hover:bg-secondary/50 transition-colors"
+          >
+            <Heart size={18} className={`lg:w-5 lg:h-5 ${wishlistItems.some(i => i.product.id === selectedProduct.id) ? 'fill-primary text-primary' : ''}`} />
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsAROpen(true)}
+            className="p-2.5 lg:p-3 glass-panel rounded-full hover:bg-secondary/50 transition-colors group"
+            title="AR Preview"
+          >
+            <Camera size={18} className="lg:w-5 lg:h-5 group-hover:text-primary transition-colors" />
+          </motion.button>
+        </div>
 
         {/* Compare indicator */}
         {isInCompare(selectedProduct.id) && (
-          <div className="absolute top-16 lg:top-20 right-14 lg:right-16">
+          <div className="absolute top-32 lg:top-36 right-4">
             <span className="bg-primary/20 text-primary px-2 py-1 rounded-full text-xs flex items-center gap-1">
               <GitCompare size={12} />
               <span className="hidden sm:inline">In Compare</span>
@@ -445,6 +459,14 @@ const Index = () => {
           totalPrice,
         }}
         onComplete={handleCheckoutComplete}
+      />
+
+      {/* AR Preview */}
+      <ARPreview
+        isOpen={isAROpen}
+        onClose={() => setIsAROpen(false)}
+        product={selectedProduct}
+        color={selectedColor}
       />
     </div>
   );

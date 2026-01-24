@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Search, X, Cpu } from 'lucide-react';
 import { Product } from '@/types/product';
 import { categories } from '@/data/categories';
 import { getDeviceTypeIcon } from '@/data/categories';
+import { AdvancedFilters } from './AdvancedFilters';
 
 interface ProductSidebarProps {
   products: Product[];
@@ -16,17 +17,24 @@ export const ProductSidebar = ({ products, selectedProduct, onSelectProduct }: P
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedCategory, setExpandedCategory] = useState<string | null>('electronics');
   const [expandedDeviceType, setExpandedDeviceType] = useState<string | null>(selectedProduct.deviceType);
+  const [filteredByAdvanced, setFilteredByAdvanced] = useState<Product[] | null>(null);
+
+  const handleAdvancedFilter = useCallback((filtered: Product[]) => {
+    setFilteredByAdvanced(filtered.length === products.length ? null : filtered);
+  }, [products.length]);
 
   const filteredProducts = useMemo(() => {
-    if (!searchQuery.trim()) return products;
+    let baseProducts = filteredByAdvanced || products;
+    
+    if (!searchQuery.trim()) return baseProducts;
     const query = searchQuery.toLowerCase();
-    return products.filter(
+    return baseProducts.filter(
       (p) =>
         p.name.toLowerCase().includes(query) ||
         p.brandName.toLowerCase().includes(query) ||
         p.description.toLowerCase().includes(query)
     );
-  }, [products, searchQuery]);
+  }, [products, searchQuery, filteredByAdvanced]);
 
   const groupedProducts = useMemo(() => {
     const grouped: Record<string, Product[]> = {};
@@ -81,7 +89,7 @@ export const ProductSidebar = ({ products, selectedProduct, onSelectProduct }: P
             </div>
 
             {/* Search */}
-            <div className="p-4 border-b border-border">
+            <div className="p-4 border-b border-border space-y-3">
               <div className="relative">
                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <input
@@ -100,6 +108,9 @@ export const ProductSidebar = ({ products, selectedProduct, onSelectProduct }: P
                   </button>
                 )}
               </div>
+              
+              {/* Advanced Filters */}
+              <AdvancedFilters products={products} onFilter={handleAdvancedFilter} />
             </div>
 
             {/* Category Tree */}
