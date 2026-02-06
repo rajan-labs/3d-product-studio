@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CreditCard, Truck, User, Check, ChevronRight, ShieldCheck } from 'lucide-react';
+import { X, CreditCard, Truck, User, Check, ChevronRight, ShieldCheck, AlertTriangle, PartyPopper, GraduationCap } from 'lucide-react';
 import { useState } from 'react';
 import { ConfiguredProduct, CheckoutFormData } from '@/types/product';
 import { useOrderHistory } from '@/hooks/useOrderHistory';
@@ -11,7 +11,7 @@ interface CheckoutModalProps {
   onComplete: () => void;
 }
 
-type Step = 'info' | 'shipping' | 'payment' | 'confirm';
+type Step = 'info' | 'shipping' | 'payment' | 'confirm' | 'success';
 
 const steps: { id: Step; label: string; icon: typeof User }[] = [
   { id: 'info', label: 'Info', icon: User },
@@ -93,6 +93,10 @@ export const CheckoutModal = ({ isOpen, onClose, product, onComplete }: Checkout
 
   const handleSubmit = () => {
     addOrder(product.product, product.selectedColor, product.selectedVariants, product.totalPrice);
+    setCurrentStep('success');
+  };
+
+  const handleClose = () => {
     onComplete();
     onClose();
     setCurrentStep('info');
@@ -159,44 +163,54 @@ export const CheckoutModal = ({ isOpen, onClose, product, onComplete }: Checkout
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="fixed inset-4 lg:inset-[10%] z-50 glass-panel rounded-2xl overflow-hidden flex flex-col max-w-3xl mx-auto"
           >
-            {/* Header */}
-            <div className="p-4 lg:p-6 border-b border-border">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl lg:text-2xl font-display font-bold">Checkout</h2>
-                <button onClick={onClose} className="p-2 hover:bg-secondary rounded-lg transition-colors">
-                  <X size={20} />
-                </button>
-              </div>
-
-              {/* Progress Steps */}
-              <div className="flex items-center justify-between">
-                {steps.map((step, index) => {
-                  const Icon = step.icon;
-                  const isActive = step.id === currentStep;
-                  const isPast = steps.findIndex((s) => s.id === currentStep) > index;
-
-                  return (
-                    <div key={step.id} className="flex items-center">
-                      <div
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors ${
-                          isActive
-                            ? 'bg-primary text-primary-foreground'
-                            : isPast
-                            ? 'bg-primary/20 text-primary'
-                            : 'bg-secondary text-muted-foreground'
-                        }`}
-                      >
-                        <Icon size={16} />
-                        <span className="text-sm font-medium hidden sm:inline">{step.label}</span>
-                      </div>
-                      {index < steps.length - 1 && (
-                        <ChevronRight size={16} className="mx-2 text-muted-foreground" />
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+            {/* Demo Notice */}
+            <div className="px-4 py-2 bg-amber-500/10 border-b border-amber-500/20 flex items-center justify-center gap-2">
+              <AlertTriangle size={14} className="text-amber-500" />
+              <span className="text-xs font-medium text-amber-600 dark:text-amber-400">
+                Demo Only — No real payments will be processed
+              </span>
             </div>
+
+            {/* Header */}
+            {currentStep !== 'success' && (
+              <div className="p-4 lg:p-6 border-b border-border">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl lg:text-2xl font-display font-bold">Checkout</h2>
+                  <button onClick={handleClose} className="p-2 hover:bg-secondary rounded-lg transition-colors">
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Progress Steps */}
+                <div className="flex items-center justify-between">
+                  {steps.map((step, index) => {
+                    const Icon = step.icon;
+                    const isActive = step.id === currentStep;
+                    const isPast = steps.findIndex((s) => s.id === currentStep) > index;
+
+                    return (
+                      <div key={step.id} className="flex items-center">
+                        <div
+                          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-colors ${
+                            isActive
+                              ? 'bg-primary text-primary-foreground'
+                              : isPast
+                              ? 'bg-primary/20 text-primary'
+                              : 'bg-secondary text-muted-foreground'
+                          }`}
+                        >
+                          <Icon size={16} />
+                          <span className="text-sm font-medium hidden sm:inline">{step.label}</span>
+                        </div>
+                        {index < steps.length - 1 && (
+                          <ChevronRight size={16} className="mx-2 text-muted-foreground" />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Content */}
             <div className="flex-1 overflow-y-auto p-4 lg:p-6">
@@ -357,26 +371,84 @@ export const CheckoutModal = ({ isOpen, onClose, product, onComplete }: Checkout
                     </div>
                   </motion.div>
                 )}
+
+                {currentStep === 'success' && (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="flex flex-col items-center justify-center py-8 lg:py-12 text-center"
+                  >
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+                      className="w-20 h-20 lg:w-24 lg:h-24 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6"
+                    >
+                      <PartyPopper size={40} className="text-emerald-500 lg:w-12 lg:h-12" />
+                    </motion.div>
+                    
+                    <h3 className="text-2xl lg:text-3xl font-display font-bold mb-2">
+                      Payment Simulation Successful!
+                    </h3>
+                    <p className="text-muted-foreground mb-4">Demo Only — No real money involved</p>
+                    
+                    <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl mb-6 max-w-sm">
+                      <div className="flex items-center gap-2 justify-center mb-2">
+                        <GraduationCap size={18} className="text-emerald-500" />
+                        <span className="font-semibold text-emerald-600 dark:text-emerald-400">Educational Demo</span>
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        This is a portfolio demonstration project. No actual payment was processed and no products will be shipped.
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-secondary/30 rounded-xl mb-6">
+                      <p className="text-sm">
+                        <span className="font-semibold">{product.product.name}</span>
+                        <span className="text-muted-foreground"> in </span>
+                        <span className="font-semibold">{product.selectedColor.name}</span>
+                      </p>
+                      <p className="text-lg font-bold text-primary mt-1">${product.totalPrice.toLocaleString()}</p>
+                    </div>
+
+                    <p className="text-xs text-muted-foreground">
+                      Order ID: DEMO-{Date.now().toString(36).toUpperCase()}
+                    </p>
+                  </motion.div>
+                )}
               </AnimatePresence>
             </div>
 
             {/* Footer */}
-            <div className="p-4 lg:p-6 border-t border-border flex gap-3">
-              {currentStep !== 'info' && (
+            {currentStep !== 'success' ? (
+              <div className="p-4 lg:p-6 border-t border-border flex gap-3">
+                {currentStep !== 'info' && (
+                  <button
+                    onClick={prevStep}
+                    className="px-6 py-3 bg-secondary rounded-xl font-medium hover:bg-secondary/80 transition-colors"
+                  >
+                    Back
+                  </button>
+                )}
                 <button
-                  onClick={prevStep}
-                  className="px-6 py-3 bg-secondary rounded-xl font-medium hover:bg-secondary/80 transition-colors"
+                  onClick={currentStep === 'confirm' ? handleSubmit : nextStep}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-xl font-semibold shadow-lg shadow-primary/25 hover:opacity-90 transition-opacity"
                 >
-                  Back
+                  {currentStep === 'confirm' ? 'Place Order (Demo)' : 'Continue'}
                 </button>
-              )}
-              <button
-                onClick={currentStep === 'confirm' ? handleSubmit : nextStep}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-xl font-semibold shadow-lg shadow-primary/25 hover:opacity-90 transition-opacity"
-              >
-                {currentStep === 'confirm' ? 'Place Order' : 'Continue'}
-              </button>
-            </div>
+              </div>
+            ) : (
+              <div className="p-4 lg:p-6 border-t border-border">
+                <button
+                  onClick={handleClose}
+                  className="w-full px-6 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-xl font-semibold shadow-lg shadow-primary/25 hover:opacity-90 transition-opacity"
+                >
+                  Close & Continue Browsing
+                </button>
+              </div>
+            )}
           </motion.div>
         </>
       )}
