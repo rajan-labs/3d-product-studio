@@ -14,6 +14,8 @@ import { ProductRatingBadge } from '@/components/ProductRatingBadge';
 import { ProductReviews } from '@/components/ProductReviews';
 import { CheckoutModal } from '@/components/CheckoutModal';
 import { ARPreview } from '@/components/ARPreview';
+import { DemoBanner } from '@/components/DemoBanner';
+import { PortfolioFooter } from '@/components/PortfolioFooter';
 import { useCartStore } from '@/hooks/useCartStore';
 import { useCompareStore } from '@/hooks/useCompareStore';
 import { useWishlistStore } from '@/hooks/useWishlistStore';
@@ -151,6 +153,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen overflow-hidden">
+      {/* Demo Banner */}
+      <DemoBanner />
+      
+      {/* Portfolio Footer */}
+      <PortfolioFooter />
+
       {/* Sidebar */}
       <ProductSidebar
         products={products}
