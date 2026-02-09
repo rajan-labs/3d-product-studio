@@ -1,7 +1,7 @@
 # 🎨 Virtual Product Studio – 3D Interactive Demo
 
 A modern, fully-featured **educational e-commerce demo** showcasing interactive 3D product visualization, comparison tools, shopping cart, and AR preview. Built with React, Three.js, and Tailwind CSS.
-[Live Demo]( https://3d-product-studio.netlify.app/ ).
+[Live Demo]( https://3d-product-studio-iota.vercel.app/ ).
 
 > ⚠️ **Educational Demo Only** – This is a demonstration project. No real payments, transactions, or data collection occurs.
 
