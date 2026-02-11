@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { ShoppingCart, GitCompare, Heart, Package, Sun, Moon, Menu } from 'lucide-react';
+import { ShoppingCart, GitCompare, Bookmark, Package, Sun, Moon, Menu } from 'lucide-react';
+import logoImg from '@/assets/logo.png';
 
 interface HeaderProps {
   theme: 'light' | 'dark';
@@ -35,10 +36,11 @@ export const Header = ({
       className="fixed top-0 right-0 left-0 z-10 p-3 lg:p-4 flex items-center justify-between glass-panel border-b border-border"
       role="banner"
     >
-      <div className="ml-14 lg:ml-80">
+      <div className="ml-14 lg:ml-80 flex items-center gap-2">
+        <img src={logoImg} alt="3D Product Studio" className="w-8 h-8 lg:w-10 lg:h-10 object-contain" />
         <h1 className="text-lg lg:text-2xl font-display font-bold">
-          <span className="glow-text">Virtual</span>{' '}
-          <span className="text-foreground hidden sm:inline">Product Studio</span>
+          <span className="glow-text">3D Product</span>{' '}
+          <span className="text-foreground hidden sm:inline">Studio</span>
         </h1>
       </div>
 
@@ -94,7 +96,7 @@ export const Header = ({
           className="relative p-2 lg:p-2.5 bg-secondary rounded-xl hover:bg-secondary/80 transition-colors"
           aria-label="View wishlist"
         >
-          <Heart size={16} className="lg:w-[18px] lg:h-[18px]" />
+          <Bookmark size={16} className="lg:w-[18px] lg:h-[18px]" />
           {wishlistCount > 0 && (
             <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-primary-foreground text-[10px] rounded-full flex items-center justify-center" aria-hidden="true">
               {wishlistCount}

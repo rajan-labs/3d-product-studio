@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, ShoppingCart, Trash2 } from 'lucide-react';
+import { X, Bookmark, ShoppingCart, Trash2 } from 'lucide-react';
 import { WishlistItem } from '@/hooks/useWishlistStore';
 import { getDeviceTypeIcon } from '@/data/categories';
 
@@ -44,7 +44,7 @@ export const WishlistDrawer = ({
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-border">
               <div className="flex items-center gap-2">
-                <Heart size={20} className="text-primary" />
+                <Bookmark size={20} className="text-primary" />
                 <h2 className="text-lg font-semibold">Wishlist ({items.length})</h2>
               </div>
               <button
@@ -59,7 +59,7 @@ export const WishlistDrawer = ({
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {items.length === 0 ? (
                 <div className="text-center text-muted-foreground py-8">
-                  <Heart size={48} className="mx-auto mb-4 opacity-50" />
+                  <Bookmark size={48} className="mx-auto mb-4 opacity-50" />
                   <p>Your wishlist is empty</p>
                 </div>
               ) : (
