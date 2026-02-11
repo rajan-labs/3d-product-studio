@@ -34,7 +34,7 @@ export default function Help() {
     },
     {
       question: 'How do I save my wishlist?',
-      answer: 'Click the heart icon to add products to your wishlist. This is stored in your browser. Clear your cache to reset it.'
+      answer: 'Click the bookmark icon to add products to your wishlist. This is stored in your browser. Clear your cache to reset it.'
     },
     {
       question: 'What is the demo login?',

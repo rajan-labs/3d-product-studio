@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { Code2, Github, Linkedin, ExternalLink } from 'lucide-react';
+import { Github, Linkedin, ExternalLink } from 'lucide-react';
+import logoImg from '@/assets/logo.png';
 
 export const PortfolioFooter = () => {
   return (
@@ -12,7 +13,7 @@ export const PortfolioFooter = () => {
       <div className="ml-0 lg:ml-72 flex justify-center">
         <div className="flex flex-col items-center gap-1 py-2 px-4">
           <div className="flex items-center gap-2 text-[10px] lg:text-xs text-muted-foreground/60">
-            <Code2 size={12} />
+            <img src={logoImg} alt="3D Product Studio" className="w-4 h-4 object-contain" />
             <span>Built for learning & portfolio demonstration</span>
           </div>
           <div className="flex items-center gap-3 text-muted-foreground/40">

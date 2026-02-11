@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Camera, GitCompare } from 'lucide-react';
+import { Bookmark, Camera, GitCompare } from 'lucide-react';
 import { ProductScene } from '@/components/3d/ProductScene';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { ProductRatingBadge } from '@/components/ProductRatingBadge';
@@ -170,7 +170,7 @@ export const ProductViewerSection = ({
           className="p-2.5 lg:p-3 glass-panel rounded-full hover:bg-secondary/50 transition-colors"
           aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
         >
-          <Heart
+          <Bookmark
             size={18}
             className={`lg:w-5 lg:h-5 ${isWishlisted ? 'fill-primary text-primary' : ''}`}
           />
